@@ -9,6 +9,8 @@ def play(player):
     print("3: Tie (payout 8:1)")
 
     bet = get_valid_bet(player.get_balance())
+    if bet == 0:  # User wants to exit
+        return
     if not player.deduct_balance(bet):
         return
 
@@ -85,3 +87,5 @@ def play(player):
             player.add_balance(winnings)
         else:
             print("You lost your bet.")
+    
+    print(f"\nYour current balance: ${player.get_balance():.2f}")

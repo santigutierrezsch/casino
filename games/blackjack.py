@@ -1,17 +1,5 @@
 import random
-
-def get_valid_bet(money):
-    while True:
-        try:
-            bet = float(input(f"Enter your bet amount (You have ${money:.2f}): "))
-            if bet > money:
-                print("You cannot bet more than you have!")
-            elif bet <= 0:
-                print("Your bet must be greater than 0!")
-            else:
-                return bet
-        except ValueError:
-            print("Invalid input. Please enter a numeric value.")
+from util import get_valid_bet
 
 def calculate_hand_value(hand):
     value = sum(hand)
@@ -22,7 +10,7 @@ def calculate_hand_value(hand):
     return value
 
 def create_deck():
-    deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10] * 4
+    deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11] * 4  # 11 represents Ace
     random.shuffle(deck)
     return deck
 
@@ -41,6 +29,8 @@ def play(player):
     )
 
     bet = get_valid_bet(player.get_balance())
+    if bet == 0:  # User wants to exit
+        return
     if not player.deduct_balance(bet):
         return
 
@@ -51,6 +41,7 @@ def play(player):
     if calculate_hand_value(dealer_hand) == 21:
         print(f"Dealer's hand: {dealer_hand}, Value: 21")
         print("Dealer has blackjack! You lose.")
+        print(f"\nYour current balance: ${player.get_balance():.2f}")
         return
 
     while True:
@@ -60,6 +51,7 @@ def play(player):
         if calculate_hand_value(player_hand) == 21:
             print("Blackjack! You win!")
             player.add_balance(bet * 2.5)
+            print(f"\nYour current balance: ${player.get_balance():.2f}")
             return
 
         action = input("Do you want to hit or stand? (H/S) ").lower()
@@ -68,6 +60,7 @@ def play(player):
             if calculate_hand_value(player_hand) > 21:
                 print(f"Player's hand: {player_hand}, Value: {calculate_hand_value(player_hand)}")
                 print("Bust! You lose.")
+                print(f"\nYour current balance: ${player.get_balance():.2f}")
                 return
         elif action == 's':
             break
@@ -89,3 +82,5 @@ def play(player):
     else:
         print("It's a tie!")
         player.add_balance(bet)
+    
+    print(f"\nYour current balance: ${player.get_balance():.2f}")
