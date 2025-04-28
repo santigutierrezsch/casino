@@ -1,6 +1,4 @@
 import os
-from main import main
-num7 = 0
 
 def get_valid_bet(money):
     while True:
@@ -10,10 +8,9 @@ def get_valid_bet(money):
                 print("You cannot bet more than you have!")
             elif bet < 0:
                 print("Your bet must be greater than 0!")
-                num7 += 1
             elif bet == 0:
-                print("Exiting game...")
-                main()
+                print("Returning to main menu...")
+                return 0  # Return 0 to indicate user wants to exit
             else:
                 return bet
         except ValueError:
